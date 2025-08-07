@@ -132,25 +132,25 @@ export const NewsProvider = ({ children }) => {
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       filteredNews = filteredNews.filter(item => 
-        item.editedTitle.toLowerCase().includes(query) ||
-        item.editedSummary.toLowerCase().includes(query) ||
-        item.city.toLowerCase().includes(query) ||
-        item.topic.toLowerCase().includes(query) ||
-        item.publisherFirstName.toLowerCase().includes(query)
+        (item.editedTitle || item.title || '').toLowerCase().includes(query) ||
+        (item.editedSummary || item.summary || item.description || '').toLowerCase().includes(query) ||
+        (item.city || '').toLowerCase().includes(query) ||
+        (item.topic || '').toLowerCase().includes(query) ||
+        (item.publisherFirstName || item.publisherName || '').toLowerCase().includes(query)
       );
     }
 
     // Apply city filter
     if (filters.city) {
       filteredNews = filteredNews.filter(item => 
-        item.city.toLowerCase() === filters.city.toLowerCase()
+        (item.city || '').toLowerCase() === filters.city.toLowerCase()
       );
     }
 
     // Apply topic filter
     if (filters.topic) {
       filteredNews = filteredNews.filter(item => 
-        item.topic.toLowerCase() === filters.topic.toLowerCase()
+        (item.topic || '').toLowerCase() === filters.topic.toLowerCase()
       );
     }
 
@@ -163,6 +163,36 @@ export const NewsProvider = ({ children }) => {
 
   const getAnalytics = () => {
     return analyticsService.getAllStats();
+  };
+
+  const getTotalAnalytics = () => {
+    const totalNews = news.length;
+    const totalBookmarks = bookmarks.length;
+    
+    // Calculate cities and topics
+    const cities = [...new Set(news.map(item => item.city))];
+    const topics = [...new Set(news.map(item => item.topic))];
+    
+    // Calculate news by city
+    const newsByCity = {};
+    news.forEach(item => {
+      newsByCity[item.city] = (newsByCity[item.city] || 0) + 1;
+    });
+    
+    // Calculate news by topic
+    const newsByTopic = {};
+    news.forEach(item => {
+      newsByTopic[item.topic] = (newsByTopic[item.topic] || 0) + 1;
+    });
+
+    return {
+      totalNews,
+      totalBookmarks,
+      totalCities: cities.length,
+      totalTopics: topics.length,
+      newsByCity,
+      newsByTopic,
+    };
   };
 
   const reinitializeAnalytics = () => {
@@ -184,6 +214,7 @@ export const NewsProvider = ({ children }) => {
     getFilteredNews,
     getBookmarkedNews,
     getAnalytics,
+    getTotalAnalytics,
     reinitializeAnalytics,
   };
 

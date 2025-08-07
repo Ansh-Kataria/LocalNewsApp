@@ -21,12 +21,12 @@ fi
 echo "✅ npm version: $(npm --version)"
 
 # Check if Expo CLI is installed
-if ! command -v expo &> /dev/null; then
-    echo "📦 Installing Expo CLI..."
-    npm install -g @expo/cli
+if ! command -v npx &> /dev/null; then
+    echo "❌ npx is not available. Please install Node.js with npm."
+    exit 1
 fi
 
-echo "✅ Expo CLI version: $(expo --version)"
+echo "✅ npx is available (Expo CLI will be used via npx)"
 
 # Install dependencies
 echo ""

@@ -1,5 +1,3 @@
-import { OPENAI_CONFIG } from '../config/openai';
-
 // Mock GPT API response for development (fallback)
 const MOCK_GPT_RESPONSES = {
   valid: {
