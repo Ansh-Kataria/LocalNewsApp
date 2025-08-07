@@ -223,6 +223,3 @@ For issues or questions:
 3. Clear Expo cache: `expo start -c`
 4. Reset Metro bundler: `expo start --clear`
 
-## License
-
-This project is created for the React Native assignment by Camorent Engineering. 
